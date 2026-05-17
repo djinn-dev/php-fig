@@ -8,6 +8,19 @@ use Psr\Http\Message\StreamInterface;
 use RuntimeException;
 use Throwable;
 
+use function fclose;
+use function feof;
+use function fread;
+use function fseek;
+use function fstat;
+use function ftell;
+use function fwrite;
+use function is_resource;
+use function restore_error_handler;
+use function set_error_handler;
+use function stream_get_contents;
+use function stream_get_meta_data;
+
 class Stream implements StreamInterface
 {
     private const array READ_WRITE_HASH = [
