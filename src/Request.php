@@ -20,7 +20,7 @@ class Request extends MessageAbstract implements RequestInterface
 
     private UriInterface $uri;
 
-    private string $method;
+    private string $method = '';
 
     /**
      * @inheritDoc
