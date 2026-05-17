@@ -8,6 +8,9 @@ use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UploadedFileInterface;
 
+use function is_array;
+use function is_object;
+
 class ServerRequest extends Request implements ServerRequestInterface
 {
     private array $serverParams = [];
