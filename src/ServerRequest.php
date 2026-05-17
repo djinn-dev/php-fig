@@ -114,7 +114,7 @@ class ServerRequest extends Request implements ServerRequestInterface
     /**
      * @inheritDoc
      */
-    public function getParsedBody()
+    public function getParsedBody(): array|object|null
     {
         return $this->parsedBody;
     }
