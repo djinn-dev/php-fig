@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DjinnDev\Psr7;
 
+use InvalidArgumentException;
 use Psr\Http\Message\StreamInterface;
 use RuntimeException;
 use Throwable;
@@ -44,6 +45,19 @@ class Stream implements StreamInterface
     private array|null $streamMetaData = null;
 
     private int|null $size = null;
+
+    /**
+     * @param resource $resource
+     */
+    public function __construct($resource)
+    {
+        if (!is_resource($resource))
+        {
+            throw new InvalidArgumentException('First argument to Stream::__construct() must be resource');
+        }
+
+        $this->stream = $resource;
+    }
 
     /**
      * @inheritDoc
