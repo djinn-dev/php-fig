@@ -34,19 +34,6 @@ class ServerRequest extends Request implements ServerRequestInterface
         return $this->serverParams;
     }
 
-    public function withServerParams(array $params): ServerRequestInterface
-    {
-        if ($params === $this->serverParams)
-        {
-            return $this;
-        }
-
-        $clone = clone $this;
-        $clone->serverParams = $params;
-
-        return $clone;
-    }
-
     /**
      * @inheritDoc
      */
