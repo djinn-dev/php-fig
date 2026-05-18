@@ -3,8 +3,7 @@
     "description": "A fast PHP8 implementation of PSR-7",
     "license": "MIT",
     "keywords": [
-        "psr-7",
-        "psr-17"
+        "psr-7"
     ],
     "homepage": "https://djinn.dev/",
     "authors": [
@@ -15,13 +14,10 @@
     ],
     "require": {
         "php": ">=8.3",
-        "psr/http-message": "^2.0",
-        "psr/http-factory": "^1.1.0",
-        "league/uri-polyfill": "^7.8"
+        "psr/http-message": "^2.0"
     },
     "provide": {
-        "psr/http-message-implementation": "1.0",
-        "psr/http-factory-implementation": "1.0"
+        "psr/http-message-implementation": "1.0"
     },
     "autoload": {
         "psr-4": {
