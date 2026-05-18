@@ -9,28 +9,52 @@ use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use RuntimeException;
 
+use function fopen;
+use function is_string;
+
+use const UPLOAD_ERR_OK;
+use const UPLOAD_ERR_INI_SIZE;
+use const UPLOAD_ERR_FORM_SIZE;
+use const UPLOAD_ERR_PARTIAL;
+use const UPLOAD_ERR_NO_FILE;
+use const UPLOAD_ERR_NO_TMP_DIR;
+use const UPLOAD_ERR_CANT_WRITE;
+use const UPLOAD_ERR_EXTENSION;
+
 class UploadedFile implements UploadedFileInterface
 {
-    private const array ERRORS = [
-        \UPLOAD_ERR_OK => 1,
-        \UPLOAD_ERR_INI_SIZE => 1,
-        \UPLOAD_ERR_FORM_SIZE => 1,
-        \UPLOAD_ERR_PARTIAL => 1,
-        \UPLOAD_ERR_NO_FILE => 1,
-        \UPLOAD_ERR_NO_TMP_DIR => 1,
-        \UPLOAD_ERR_CANT_WRITE => 1,
-        \UPLOAD_ERR_EXTENSION => 1,
+    protected const array ERRORS = [
+        UPLOAD_ERR_OK => 1,
+        UPLOAD_ERR_INI_SIZE => 1,
+        UPLOAD_ERR_FORM_SIZE => 1,
+        UPLOAD_ERR_PARTIAL => 1,
+        UPLOAD_ERR_NO_FILE => 1,
+        UPLOAD_ERR_NO_TMP_DIR => 1,
+        UPLOAD_ERR_CANT_WRITE => 1,
+        UPLOAD_ERR_EXTENSION => 1,
     ];
 
-    private StreamInterface $stream;
+    protected bool $moved = false;
 
-    private int $error = \UPLOAD_ERR_OK;
-
-    private string|null $clientFilename = null;
-
-    private string|null $clientMediaType = null;
-
-    private bool $moved = false;
+    /**
+     * @param StreamInterface $stream
+     * @param int $error
+     * @param string|null $clientFilename
+     * @param string|null $clientMediaType
+     * @throws InvalidArgumentException
+     */
+    public function __construct(
+        protected StreamInterface $stream,
+        protected ?int $size = null,
+        protected int $error = UPLOAD_ERR_OK,
+        protected string|null $clientFilename = null,
+        protected string|null $clientMediaType = null,
+    ) {
+        if (!isset(self::ERRORS[$this->error]))
+        {
+            throw new InvalidArgumentException('Error code provided is invalid');
+        }
+    }
 
     /**
      * @inheritDoc
@@ -83,7 +107,7 @@ class UploadedFile implements UploadedFileInterface
      */
     public function getSize(): ?int
     {
-        return $this->stream->getSize();
+        return $this->size;
     }
 
     /**
@@ -116,14 +140,14 @@ class UploadedFile implements UploadedFileInterface
      * @return void
      * @throws RuntimeException
      */
-    private function validateStream(): void
+    protected function validateStream(): void
     {
         if (!($this->stream instanceof StreamInterface))
         {
             throw new RuntimeException('No stream specified');
         }
 
-        if ($this->error !== \UPLOAD_ERR_OK)
+        if ($this->error !== UPLOAD_ERR_OK)
         {
             throw new RuntimeException('Cannot retrieve stream due to upload error');
         }

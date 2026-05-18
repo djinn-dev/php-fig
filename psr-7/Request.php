@@ -10,7 +10,7 @@ use Psr\Http\Message\UriInterface;
 
 class Request extends MessageAbstract implements RequestInterface
 {
-    private const array VALID_REQUEST_METHODS = [
+    protected const array VALID_REQUEST_METHODS = [
         'GET' => true,
         'POST' => true,
         'PUT' => true,
@@ -18,9 +18,20 @@ class Request extends MessageAbstract implements RequestInterface
         'DELETE' => true,
     ];
 
-    private UriInterface $uri;
-
-    private string $method = '';
+    /**
+     * @param string $method
+     * @param UriInterface $uri
+     * @throws InvalidArgumentException
+     */
+    public function __construct(
+        protected string $method,
+        protected UriInterface $uri,
+    ) {
+        if (!isset(self::VALID_REQUEST_METHODS[$method]))
+        {
+            throw new InvalidArgumentException('Invalid porocol.');
+        }
+    }
 
     /**
      * @inheritDoc

@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace DjinnDev\Psr7;
 
+use DjinnDev\Psr17\StreamFactory;
 use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
 
 class Response extends MessageAbstract implements ResponseInterface
 {
-    private const array STATUS_CODE_REASONS = [
+    protected const array STATUS_CODE_REASONS = [
         100 => 'Continue', 101 => 'Switching Protocols', 102 => 'Processing',
         200 => 'OK', 201 => 'Created', 202 => 'Accepted', 203 => 'Non-Authoritative Information', 204 => 'No Content', 205 => 'Reset Content', 206 => 'Partial Content', 207 => 'Multi-status', 208 => 'Already Reported',
         300 => 'Multiple Choices', 301 => 'Moved Permanently', 302 => 'Found', 303 => 'See Other', 304 => 'Not Modified', 305 => 'Use Proxy', 306 => 'Switch Proxy', 307 => 'Temporary Redirect',
@@ -17,9 +19,20 @@ class Response extends MessageAbstract implements ResponseInterface
         500 => 'Internal Server Error', 501 => 'Not Implemented', 502 => 'Bad Gateway', 503 => 'Service Unavailable', 504 => 'Gateway Time-out', 505 => 'HTTP Version not supported', 506 => 'Variant Also Negotiates', 507 => 'Insufficient Storage', 508 => 'Loop Detected', 511 => 'Network Authentication Required',
     ];
 
-    private int $statusCode = 200;
+    /**
+     * @param int $statusCode
+     * @param string $reasonPhrase
+     * @param StreamInterface|null $body
+     */
+    public function __construct(
+        protected int $statusCode = 200,
+        protected string $reasonPhrase = '',
+        ?StreamInterface $body = null,
+    ) {
+        $this->reasonPhrase = $this->solveReasonPhrase($this->statusCode, $this->reasonPhrase);
 
-    private string $reasonPhrase = 'OK';
+        $this->body = $body ?? (new StreamFactory())->createStream();
+    }
 
     /**
      * @inheritDoc
@@ -34,15 +47,7 @@ class Response extends MessageAbstract implements ResponseInterface
      */
     public function withStatus(int $code, string $reasonPhrase = ''): ResponseInterface
     {
-        if (!isset(self::STATUS_CODE_REASONS[$code]))
-        {
-            throw new InvalidArgumentException('Invalid status code provided');
-        }
-
-        if ($reasonPhrase === '')
-        {
-            $reasonPhrase = self::STATUS_CODE_REASONS[$code];
-        }
+        $reasonPhrase = $this->solveReasonPhrase($code, $reasonPhrase);
 
         if ($code === $this->statusCode && $reasonPhrase === $this->reasonPhrase)
         {
@@ -62,5 +67,26 @@ class Response extends MessageAbstract implements ResponseInterface
     public function getReasonPhrase(): string
     {
         return $this->reasonPhrase;
+    }
+
+    /**
+     * @param int $code
+     * @param string $reasonPhrase
+     * @return string
+     * @throws InvalidArgumentException
+     */
+    protected function solveReasonPhrase(int $code, string $reasonPhrase): string
+    {
+        if (!isset(self::STATUS_CODE_REASONS[$code]))
+        {
+            throw new InvalidArgumentException('Invalid status code provided');
+        }
+
+        if ($reasonPhrase === '')
+        {
+            $reasonPhrase = self::STATUS_CODE_REASONS[$code];
+        }
+
+        return $reasonPhrase;
     }
 }

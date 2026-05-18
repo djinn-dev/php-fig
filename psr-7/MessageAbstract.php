@@ -17,7 +17,7 @@ use function mb_strtolower;
 
 abstract class MessageAbstract implements MessageInterface
 {
-    private const array VALID_PROTOCOL_VERSIONS = [
+    protected const array VALID_PROTOCOL_VERSIONS = [
         '0.9' => false, // Obsolete
         '1.0' => false, // Obsolete
         '1.1' => true,
@@ -25,15 +25,14 @@ abstract class MessageAbstract implements MessageInterface
         '3' => true,
     ];
 
-    private string $protocolVersion = '1.1';
+    protected StreamInterface $body;
+
+    protected string $protocolVersion = '1.1';
+
+    protected array $headers = [];
 
     /** @var string[] */
-    private array $headerNameMap = [];
-
-    /** @var string[][] */
-    private array $headers = [];
-
-    private StreamInterface $body;
+    protected array $headerNameMap = [];
 
     /**
      * @inheritDoc
@@ -48,15 +47,7 @@ abstract class MessageAbstract implements MessageInterface
      */
     public function withProtocolVersion(string $version): MessageInterface
     {
-        if (!isset(self::VALID_PROTOCOL_VERSIONS[$version]))
-        {
-            throw new InvalidArgumentException('Invalid portocol.');
-        }
-
-        if (!self::VALID_PROTOCOL_VERSIONS[$version])
-        {
-            throw new InvalidArgumentException('Protocol version is obsolete.');
-        }
+        $this->checkProtocolVersion($version);
 
         if ($version !== $this->protocolVersion)
         {
@@ -196,7 +187,7 @@ abstract class MessageAbstract implements MessageInterface
      * @param string $name Case-insensitive
      * @return string|null  Case-sensitive
      */
-    private function getHeaderName(string $name): string|null
+    protected function getHeaderName(string $name): string|null
     {
         $lcName = mb_strtolower($name);
         return $this->headerNameMap[$lcName] ?? null;
@@ -208,7 +199,7 @@ abstract class MessageAbstract implements MessageInterface
      * @param string|array $value
      * @return array
      */
-    private function getValueAsArray(string|array $value): array
+    protected function getValueAsArray(string|array $value): array
     {
         if (is_string($value))
         {
@@ -225,7 +216,7 @@ abstract class MessageAbstract implements MessageInterface
      * @param string|array $value
      * @return boolean
      */
-    private function getHeaderIsValue(string $name, string|array $value): bool
+    protected function getHeaderIsValue(string $name, string|array $value): bool
     {
         $value = $this->getValueAsArray($value);
 
@@ -240,7 +231,7 @@ abstract class MessageAbstract implements MessageInterface
      * @param string|array $value
      * @return void
      */
-    private function setHeader(string $name, string|array $value): void
+    protected function setHeader(string $name, string|array $value): void
     {
         $lcName = mb_strtolower($name);
         $this->headerNameMap[$lcName] = $name;
@@ -260,7 +251,7 @@ abstract class MessageAbstract implements MessageInterface
      * @param string|array $value
      * @return void
      */
-    private function appendToHeader(string $name, string|array $value): void
+    protected function appendToHeader(string $name, string|array $value): void
     {
         if ($this->hasHeader($name))
         {
@@ -277,10 +268,30 @@ abstract class MessageAbstract implements MessageInterface
      * @param string $name Case-insensitive
      * @return void
      */
-    private function removeHeader(string $name): void
+    protected function removeHeader(string $name): void
     {
         $lcName = mb_strtolower($name);
         unset($this->headerNameMap[$lcName]);
         unset($this->headers[$name]);
+    }
+
+    /**
+     * Validate protocol version and throw if invalid
+     *
+     * @param string $version
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    protected function checkProtocolVersion(string $version): void
+    {
+        if (!isset(self::VALID_PROTOCOL_VERSIONS[$version]))
+        {
+            throw new InvalidArgumentException('Invalid portocol.');
+        }
+
+        if (!self::VALID_PROTOCOL_VERSIONS[$version])
+        {
+            throw new InvalidArgumentException('Protocol version is obsolete.');
+        }
     }
 }

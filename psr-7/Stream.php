@@ -24,7 +24,7 @@ use function stream_get_meta_data;
 
 class Stream implements StreamInterface
 {
-    private const array READ_WRITE_HASH = [
+    public const array READ_WRITE_HASH = [
         'read' => [
             'r' => true, 'w+' => true, 'r+' => true, 'x+' => true, 'c+' => true,
             'rb' => true, 'w+b' => true, 'r+b' => true, 'x+b' => true,
@@ -39,15 +39,15 @@ class Stream implements StreamInterface
         ],
     ];
 
-    private array|null $streamMetaData = null;
+    protected array|null $streamMetaData = null;
 
-    private int|null $size = null;
+    protected int|null $size = null;
 
     /**
      * @param resource $stream
      * @throws InvalidArgumentException
      */
-    public function __construct(private $stream)
+    public function __construct(protected $stream)
     {
         if (!is_resource($this->stream))
         {

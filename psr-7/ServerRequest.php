@@ -7,24 +7,37 @@ namespace DjinnDev\Psr7;
 use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UploadedFileInterface;
+use Psr\Http\Message\UriInterface;
 
 use function is_array;
 use function is_object;
 
 class ServerRequest extends Request implements ServerRequestInterface
 {
-    private array $serverParams = [];
+    protected array $cookieParams = [];
 
-    private array $cookieParams = [];
-
-    private array $queryParams = [];
+    protected array $queryParams = [];
 
     /** @var UploadedFileInterface[] */
-    private array $uploadedFiles = [];
+    protected array $uploadedFiles = [];
 
-    private array|object|null $parsedBody = null;
+    protected array|object|null $parsedBody = null;
 
-    private array $attributes = [];
+    protected array $attributes = [];
+
+    /**
+     * @param string $method
+     * @param UriInterface $uri
+     * @param array $serverParams
+     * @throws InvalidArgumentException
+     */
+    public function __construct(
+        string $method,
+        UriInterface $uri,
+        protected array $serverParams = [],
+    ) {
+        parent::__construct($method, $uri);
+    }
 
     /**
      * @inheritDoc

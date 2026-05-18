@@ -10,22 +10,27 @@ use function ltrim;
 
 class Uri implements UriInterface
 {
-    private string $scheme = '';
-
-    private string $authority = '';
-
-    private string $user = '';
-    private string|null $password = null;
-
-    private string $host = '';
-
-    private int|null $port = null;
-
-    private string $path = '';
-
-    private string $query = '';
-
-    private string $fragment = '';
+    /**
+     * @param string $scheme
+     * @param string $host
+     * @param string|null $port
+     * @param string $path
+     * @param string $query
+     * @param string $fragment
+     * @param string $user
+     * @param string|null $password
+     */
+    public function __construct(
+        protected string $scheme = '',
+        protected string $host = '',
+        protected int|null $port = null,
+        protected string $path = '',
+        protected string $query = '',
+        protected string $fragment = '',
+        protected string $user = '',
+        protected string|null $password = null,
+    ) {
+    }
 
     /**
      * @inheritDoc
@@ -239,14 +244,14 @@ class Uri implements UriInterface
             $uri .= $this->scheme . ':';
         }
 
-        if ($this->authority !== '')
+        if ($this->host !== '')
         {
-            $uri .= '//' . $this->authority;
+            $uri .= '//' . $this->host;
         }
 
         if ($this->path !== '')
         {
-            $path =  ltrim($this->path, '/');
+            $path = ltrim($this->path, '/');
             $uri .= '/' . $path;
         }
 
