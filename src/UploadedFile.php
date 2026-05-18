@@ -24,48 +24,48 @@ class UploadedFile implements UploadedFileInterface
 
     private StreamInterface $stream;
 
+    private int $error = \UPLOAD_ERR_OK;
+
+    private string|null $clientFilename = null;
+
+    private string|null $clientMediaType = null;
+
     private bool $moved = false;
 
     /**
      * @param StreamInterface|resource|string $streamOrFile
-     * @param int $error
-     * @param string|null|null $clientFilename
-     * @param string|null|null $clientMediaType
+     * @return UploadedFileInterface
      */
-    public function __construct(
-        $streamOrFile,
-        private int $error = \UPLOAD_ERR_OK,
-        private string|null $clientFilename = null,
-        private string|null $clientMediaType = null,
-    ) {
-        if (!isset(self::ERRORS[$this->error]))
+    public function withStream($streamOrFile): UploadedFileInterface
+    {
+        if ($streamOrFile === $this->stream)
         {
-            throw new InvalidArgumentException('Upload file error status must be an integer value and one of the "UPLOAD_ERR_*" constants');
+            return $this;
         }
 
-        if ($this->error === \UPLOAD_ERR_OK)
+        if (is_string($streamOrFile))
         {
-            if (is_string($streamOrFile))
+            $streamOrFile = @fopen($streamOrFile, 'r');
+            if ($streamOrFile === false)
             {
-                $streamOrFile = @fopen($streamOrFile, 'r');
-                if ($streamOrFile === false)
-                {
-                    throw new RuntimeException('Target file cannot be opened');
-                }
+                throw new RuntimeException('Target file cannot be opened');
             }
-
-            if (is_resource($streamOrFile))
-            {
-                $streamOrFile = new Stream($streamOrFile);
-            }
-
-            if (!($streamOrFile instanceof StreamInterface))
-            {
-                throw new InvalidArgumentException('Invalid stream or file provided');
-            }
-
-            $this->stream = $streamOrFile;
         }
+
+        if (is_resource($streamOrFile))
+        {
+            $streamOrFile = (new Stream())->withResource($streamOrFile);
+        }
+
+        if (!($streamOrFile instanceof StreamInterface))
+        {
+            throw new InvalidArgumentException('Invalid stream or file provided');
+        }
+
+        $clone = clone $this;
+        $clone->stream = $streamOrFile;
+
+        return $clone;
     }
 
     /**
@@ -99,10 +99,10 @@ class UploadedFile implements UploadedFileInterface
         $resource = @fopen($targetPath, 'w');
         if ($resource === false)
         {
-            throw new \RuntimeException('Target file cannot be opened');
+            throw new RuntimeException('Target file cannot be opened');
         }
 
-        $destination = new Stream($resource);
+        $destination = (new Stream())->withResource($resource);
         while (!$stream->eof())
         {
             if (!$destination->write($stream->read(1_048_576)))
@@ -131,6 +131,28 @@ class UploadedFile implements UploadedFileInterface
     }
 
     /**
+     * @param integer $error
+     * @return UploadedFileInterface
+     */
+    public function withError(int $error): UploadedFileInterface
+    {
+        if ($error === $this->error)
+        {
+            return $this;
+        }
+
+        if (!isset(self::ERRORS[$this->error]))
+        {
+            throw new InvalidArgumentException('Upload file error status must be an integer value and one of the "UPLOAD_ERR_*" constants');
+        }
+
+        $clone = clone $this;
+        $clone->error = $error;
+
+        return $clone;
+    }
+
+    /**
      * @inheritDoc
      */
     public function getClientFilename(): ?string
@@ -139,11 +161,45 @@ class UploadedFile implements UploadedFileInterface
     }
 
     /**
+     * @param string $filename
+     * @return UploadedFileInterface
+     */
+    public function withClientFilename(string $filename): UploadedFileInterface
+    {
+        if ($filename === $this->clientFilename)
+        {
+            return $this;
+        }
+
+        $clone = clone $this;
+        $clone->clientFilename = $filename;
+
+        return $clone;
+    }
+
+    /**
      * @inheritDoc
      */
     public function getClientMediaType(): ?string
     {
         return $this->clientMediaType;
+    }
+
+    /**
+     * @param string $mediaType
+     * @return UploadedFileInterface
+     */
+    public function withClientMediaType(string $mediaType): UploadedFileInterface
+    {
+        if ($mediaType === $this->clientMediaType)
+        {
+            return $this;
+        }
+
+        $clone = clone $this;
+        $clone->clientMediaType = $mediaType;
+
+        return $clone;
     }
 
     /**

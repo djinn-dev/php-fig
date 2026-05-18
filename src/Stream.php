@@ -48,15 +48,27 @@ class Stream implements StreamInterface
 
     /**
      * @param resource $resource
+     * @return StreamInterface
+     * @throws InvalidArgumentException
      */
-    public function __construct($resource)
+    public function withResource($resource): StreamInterface
     {
+        if ($resource === $this->stream)
+        {
+            return $this;
+        }
+
         if (!is_resource($resource))
         {
             throw new InvalidArgumentException('First argument to Stream::__construct() must be resource');
         }
 
-        $this->stream = $resource;
+        $clone = clone $this;
+        $clone->stream = $resource;
+        $clone->streamMetaData = null;
+        $clone->size = null;
+
+        return $clone;
     }
 
     /**

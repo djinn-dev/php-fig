@@ -40,7 +40,24 @@ class Uri implements UriInterface
      */
     public function getAuthority(): string
     {
-        return $this->authority;
+        if ($this->host === '')
+        {
+            return '';
+        }
+
+        $authority = $this->host;
+        $userInfo = $this->getUserInfo();
+        if ($userInfo !== '')
+        {
+            $authority = $userInfo . '@' . $authority;
+        }
+
+        if ($this->port !== null)
+        {
+            $authority .= ':' . $this->port;
+        }
+
+        return $authority;
     }
 
     /**
