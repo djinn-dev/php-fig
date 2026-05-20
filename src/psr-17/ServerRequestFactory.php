@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace DjinnDev\Psr17;
 
 use DjinnDev\Psr7\ServerRequest;
+use DjinnDev\Utilities\SingletonTrait;
 use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class ServerRequestFactory implements ServerRequestFactoryInterface
+final class ServerRequestFactory implements ServerRequestFactoryInterface
 {
+    use SingletonTrait;
+
     /**
      * @inheritDoc
      */

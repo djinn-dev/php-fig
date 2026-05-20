@@ -74,12 +74,12 @@ class Request extends MessageAbstract implements RequestInterface
      */
     public function withMethod(string $method): RequestInterface
     {
-        $this->verifyMethod($method);
-
-        if ($method === $this->method)
+        if (isset($this->method) && $method === $this->method)
         {
             return $this;
         }
+
+        $this->verifyMethod($method);
 
         $clone = clone $this;
         $clone->method = $method;
@@ -100,7 +100,7 @@ class Request extends MessageAbstract implements RequestInterface
      */
     public function withUri(UriInterface $uri, bool $preserveHost = false): RequestInterface
     {
-        if ($uri === $this->uri)
+        if (isset($this->uri) && $uri === $this->uri)
         {
             return $this;
         }

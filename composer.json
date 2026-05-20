@@ -28,5 +28,8 @@
             "DjinnDev\\Psr7\\": "src/psr-7/",
             "DjinnDev\\Psr17\\": "src/psr-17/"
         }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^12.5"
     }
 }

@@ -21,7 +21,7 @@ trait SingletonTrait
     /**
      * @return void
      */
-    final private function __clone(): void
+    final public function __clone(): void
     {
     }
 
