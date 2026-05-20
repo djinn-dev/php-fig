@@ -1,6 +1,7 @@
 {
-    "name": "djinn_dev/psr7",
-    "description": "A fast PHP8 implementation of PSR-7",
+    "name": "djinn_dev/php-fig",
+    "description": "A fast PHP8 implementation of PHP-Fig interfaces.",
+    "version": "0.1",
     "license": "MIT",
     "keywords": [
         "psr-7",
