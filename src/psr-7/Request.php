@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DjinnDev\Psr7;
 
+use DjinnDev\Psr17\UriFactory;
 use InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;
@@ -13,7 +14,7 @@ use Psr\Http\Message\UriInterface;
  */
 class Request extends MessageAbstract implements RequestInterface
 {
-    protected const array VALID_REQUEST_METHODS = [
+    public const array VALID_REQUEST_METHODS = [
         'GET' => true,
         'POST' => true,
         'PUT' => true,
@@ -21,28 +22,28 @@ class Request extends MessageAbstract implements RequestInterface
         'DELETE' => true,
     ];
 
+    protected string $requestTarget;
+
     protected string $method;
 
     protected UriInterface $uri;
+
+    public function __clone()
+    {
+        parent::__clone();
+
+        if (isset($this->uri))
+        {
+            $this->uri = clone $this->uri;
+        }
+    }
 
     /**
      * @inheritDoc
      */
     public function getRequestTarget(): string
     {
-        $target = $this->uri->getPath();
-        if ($target === '')
-        {
-            $target = '/';
-        }
-
-        $query = $this->uri->getQuery();
-        if ($query !== '')
-        {
-            $target .= '?' . $query;
-        }
-
-        return $target;
+        return $this->requestTarget;
     }
 
     /**
@@ -50,13 +51,13 @@ class Request extends MessageAbstract implements RequestInterface
      */
     public function withRequestTarget(string $requestTarget): RequestInterface
     {
-        if ($requestTarget === $this->getRequestTarget())
+        if (isset($this->requestTarget) && $requestTarget === $this->requestTarget)
         {
             return $this;
         }
 
         $clone = clone $this;
-        $clone->uri = new Uri($requestTarget);
+        $clone->requestTarget = $requestTarget;
 
         return $clone;
     }
@@ -105,33 +106,24 @@ class Request extends MessageAbstract implements RequestInterface
             return $this;
         }
 
-        if (!$preserveHost || !$this->hasHeader('Host'))
-        {
-            $clone = $this->withoutHeader('Host');
-            $setHostHeader = true;
-        }
-        else
-        {
-            $clone = clone $this;
-            $setHostHeader = false;
-        }
-
+        $clone = clone $this;
         $clone->uri = $uri;
 
-        if ($setHostHeader && $clone->uri->getHost() !== '')
+        // var_dump($preserveHost, $clone->hasHeader('Host'), $clone->getHeaderLine('Host') === '');
+        if (!$preserveHost || !$clone->hasHeader('Host') || $clone->getHeaderLine('Host') === '')
         {
-            $host = $clone->uri->getHost();
+            $clone = $clone->withoutHeader('Host');
 
-            $port = $clone->uri->getPort();
-            if ($port !== null)
+            $host = $uri->getHost();
+            if ($host !== '')
             {
-                $host .= ':' . $port;
-            }
+                $port = $uri->getPort();
+                if ($port !== null)
+                {
+                    $host .= ':' . $port;
+                }
 
-            $headers = ['Host' => $host] + $clone->getHeaders();
-            foreach ($headers as $name => $value)
-            {
-                $clone = $clone->withHeader($name, $value);
+                $clone = $clone->withHeader('Host', $host);
             }
         }
 

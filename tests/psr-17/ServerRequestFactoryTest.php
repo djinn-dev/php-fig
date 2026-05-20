@@ -12,7 +12,7 @@ final class ServerRequestFactoryTest extends TestCase
     public function testCreateServerRequestMethod(): void
     {
         $method = 'GET';
-        $uri = 'http://tgeene.me';
+        $uri = 'https://tgeene.me/';
         $serverParams = ['foo' => 'bar'];
 
         $this->assertInstanceOf(ServerRequestInterface::class, ServerRequestFactory::getInstance()->createServerRequest($method, $uri, $serverParams));

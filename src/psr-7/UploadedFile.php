@@ -59,6 +59,11 @@ class UploadedFile implements UploadedFileInterface
         }
     }
 
+    public function __clone()
+    {
+        $this->stream = clone $this->stream;
+    }
+
     /**
      * @inheritDoc
      */

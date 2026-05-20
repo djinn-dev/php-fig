@@ -20,6 +20,7 @@ class ServerRequest extends Request implements ServerRequestInterface
 
     protected array $queryParams = [];
 
+    /** @var UploadedFileInterface[] */
     protected array $uploadedFiles = [];
 
     protected array|object|null $parsedBody = null;
@@ -32,6 +33,16 @@ class ServerRequest extends Request implements ServerRequestInterface
     public function __construct(
         protected array $serverParams = [],
     ) {
+    }
+
+    public function __clone()
+    {
+        parent::__clone();
+
+        foreach ($this->uploadedFiles as $key => $item)
+        {
+            $this->uploadedFiles[$key] = clone $item;
+        }
     }
 
     /**

@@ -12,7 +12,7 @@ final class RequestFactoryTest extends TestCase
     public function testCreateRequestMethod(): void
     {
         $method = 'GET';
-        $uri = 'http://tgeene.me';
+        $uri = 'https://tgeene.me/';
         $this->assertInstanceOf(RequestInterface::class, RequestFactory::getInstance()->createRequest($method, $uri));
 
         $uri = UriFactory::getInstance()->createUri($uri);

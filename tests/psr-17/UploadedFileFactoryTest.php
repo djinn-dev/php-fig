@@ -11,7 +11,7 @@ final class UploadedFileFactoryTest extends TestCase
 {
     public function testCreateUploadedFileMethod(): void
     {
-        $stream = StreamFactory::getInstance()->createStream('');
+        $stream = StreamFactory::getInstance()->createStream();
 
         $this->assertInstanceOf(UploadedFileInterface::class, UploadedFileFactory::getInstance()->createUploadedFile($stream));
     }

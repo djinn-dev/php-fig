@@ -10,6 +10,6 @@ final class UriFactoryTest extends TestCase
 {
     public function testCreateUriMethod(): void
     {
-        $this->assertInstanceOf(UriInterface::class, UriFactory::getInstance()->createUri('http://tgeene.me'));
+        $this->assertInstanceOf(UriInterface::class, UriFactory::getInstance()->createUri('https://tgeene.me/'));
     }
 }

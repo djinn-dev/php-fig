@@ -37,6 +37,14 @@ abstract class MessageAbstract implements MessageInterface
     /** @var string[] */
     protected array $headerNameMap = [];
 
+    public function __clone()
+    {
+        if (isset($this->body))
+        {
+            $this->body = clone $this->body;
+        }
+    }
+
     /**
      * @inheritDoc
      */
@@ -75,7 +83,7 @@ abstract class MessageAbstract implements MessageInterface
      */
     public function hasHeader(string $name): bool
     {
-        return (bool) $this->getHeaderName($name);
+        return $this->getHeaderName($name) !== null;
     }
 
     /**
@@ -133,7 +141,9 @@ abstract class MessageAbstract implements MessageInterface
             throw new InvalidArgumentException('Header value type should be an array or string.');
         }
 
-        if (in_array($value, $this->getHeader($name)))
+        $value = $this->getValueAsArray($value);
+
+        if ($this->getHeader($name) === $value)
         {
             return $this;
         }
@@ -173,7 +183,7 @@ abstract class MessageAbstract implements MessageInterface
      */
     public function withBody(StreamInterface $body): MessageInterface
     {
-        if ($body === $this->body)
+        if (isset($this->body) && $body === $this->body)
         {
             return $this;
         }
@@ -209,7 +219,7 @@ abstract class MessageAbstract implements MessageInterface
             $value = [$value];
         }
 
-        return array_keys($value);
+        return array_values($value);
     }
 
     /**

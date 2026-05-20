@@ -3,6 +3,9 @@
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.4/phpunit.xsd"
          bootstrap="tests/bootstrap.php">
     <testsuites>
+        <testsuite name="psr-7">
+            <directory>tests/psr-7</directory>
+        </testsuite>
         <testsuite name="utilities">
             <directory>tests/utilities</directory>
         </testsuite>
