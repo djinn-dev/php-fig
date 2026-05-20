@@ -9,20 +9,21 @@ use Psr\Http\Message\RequestInterface;
 
 final class RequestTest extends TestCase
 {
+    public function testConstruct(): void
+    {
+        $request = new Request();
+        $this->assertInstanceOf(RequestInterface::class, $request);
+    }
+
     public function testRequestTargetMethods(): void
     {
         $uri = 'https://tgeene.me/';
 
         $request = new Request();
-        $this->assertInstanceOf(RequestInterface::class, $request->withRequestTarget($uri));
-
-        $request = new Request();
         $request = $request->withRequestTarget($uri);
+        $this->assertInstanceOf(RequestInterface::class, $request);
         $this->assertEquals($request, $request->withRequestTarget($uri));
         $this->assertEquals($uri, $request->getRequestTarget());
-
-        $request = new Request();
-        $request = $request->withRequestTarget($uri);
         $this->assertNotEquals($request, $request->withRequestTarget($uri . 'index.php'));
     }
 
@@ -31,10 +32,8 @@ final class RequestTest extends TestCase
         foreach (Request::VALID_REQUEST_METHODS as $method => $true)
         {
             $request = new Request();
-            $this->assertInstanceOf(RequestInterface::class, $request->withMethod($method));
-
-            $request = new Request();
             $request = $request->withMethod($method);
+            $this->assertInstanceOf(RequestInterface::class, $request);
             $this->assertEquals($request, $request->withMethod($method));
             $this->assertEquals($method, $request->getMethod());
         }
@@ -51,10 +50,8 @@ final class RequestTest extends TestCase
         $uriAlternative = UriFactory::getInstance()->createUri('https://djinn.dev/');
 
         $request = new Request();
-        $this->assertInstanceOf(RequestInterface::class, $request->withUri($uri));
-
-        $request = new Request();
         $request = $request->withUri($uri);
+        $this->assertInstanceOf(RequestInterface::class, $request);
         $this->assertEquals($request, $request->withUri($uri));
         $this->assertEquals($uri, $request->getUri());
 
