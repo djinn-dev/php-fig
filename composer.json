@@ -24,8 +24,9 @@
     },
     "autoload": {
         "psr-4": {
-            "DjinnDev\\Psr7\\": "psr-7/",
-            "DjinnDev\\Psr17\\": "psr-17/"
+            "DjinnDev\\Utilities\\": "src/utilities/",
+            "DjinnDev\\Psr7\\": "src/psr-7/",
+            "DjinnDev\\Psr17\\": "src/psr-17/"
         }
     }
 }

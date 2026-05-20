@@ -15,6 +15,9 @@ use function is_array;
 use function is_string;
 use function mb_strtolower;
 
+/**
+ * @inheritDoc
+ */
 abstract class MessageAbstract implements MessageInterface
 {
     protected const array VALID_PROTOCOL_VERSIONS = [

@@ -5,13 +5,19 @@ declare(strict_types=1);
 namespace DjinnDev\Psr17;
 
 use DjinnDev\Psr7\Stream;
+use DjinnDev\Utilities\SingletonTrait;
 use InvalidArgumentException;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\StreamInterface;
 use RuntimeException;
 
+/**
+ * @inheritDoc
+ */
 class StreamFactory implements StreamFactoryInterface
 {
+    use SingletonTrait;
+
     /**
      * @inheritDoc
      */

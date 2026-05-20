@@ -8,6 +8,9 @@ use InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;
 
+/**
+ * @inheritDoc
+ */
 class Request extends MessageAbstract implements RequestInterface
 {
     protected const array VALID_REQUEST_METHODS = [
@@ -18,20 +21,9 @@ class Request extends MessageAbstract implements RequestInterface
         'DELETE' => true,
     ];
 
-    /**
-     * @param string $method
-     * @param UriInterface $uri
-     * @throws InvalidArgumentException
-     */
-    public function __construct(
-        protected string $method,
-        protected UriInterface $uri,
-    ) {
-        if (!isset(self::VALID_REQUEST_METHODS[$method]))
-        {
-            throw new InvalidArgumentException('Invalid porocol.');
-        }
-    }
+    protected string $method;
+
+    protected UriInterface $uri;
 
     /**
      * @inheritDoc
@@ -82,10 +74,7 @@ class Request extends MessageAbstract implements RequestInterface
      */
     public function withMethod(string $method): RequestInterface
     {
-        if (!isset(self::VALID_REQUEST_METHODS[$method]))
-        {
-            throw new InvalidArgumentException('Invalid porocol.');
-        }
+        $this->verifyMethod($method);
 
         if ($method === $this->method)
         {
@@ -147,5 +136,13 @@ class Request extends MessageAbstract implements RequestInterface
         }
 
         return $clone;
+    }
+
+    protected function verifyMethod(string $method): void
+    {
+        if (!isset(self::VALID_REQUEST_METHODS[$method]))
+        {
+            throw new InvalidArgumentException('Invalid porocol.');
+        }
     }
 }

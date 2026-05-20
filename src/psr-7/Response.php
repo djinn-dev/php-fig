@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace DjinnDev\Psr7;
 
-use DjinnDev\Psr17\StreamFactory;
 use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamInterface;
 
+/**
+ * @inheritDoc
+ */
 class Response extends MessageAbstract implements ResponseInterface
 {
     protected const array STATUS_CODE_REASONS = [
@@ -22,16 +23,12 @@ class Response extends MessageAbstract implements ResponseInterface
     /**
      * @param int $statusCode
      * @param string $reasonPhrase
-     * @param StreamInterface|null $body
      */
     public function __construct(
         protected int $statusCode = 200,
         protected string $reasonPhrase = '',
-        ?StreamInterface $body = null,
     ) {
         $this->reasonPhrase = $this->solveReasonPhrase($this->statusCode, $this->reasonPhrase);
-
-        $this->body = $body ?? (new StreamFactory())->createStream();
     }
 
     /**

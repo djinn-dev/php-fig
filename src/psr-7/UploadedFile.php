@@ -21,6 +21,9 @@ use const UPLOAD_ERR_NO_TMP_DIR;
 use const UPLOAD_ERR_CANT_WRITE;
 use const UPLOAD_ERR_EXTENSION;
 
+/**
+ * @inheritDoc
+ */
 class UploadedFile implements UploadedFileInterface
 {
     protected const array ERRORS = [
@@ -34,7 +37,7 @@ class UploadedFile implements UploadedFileInterface
         UPLOAD_ERR_EXTENSION => 1,
     ];
 
-    protected bool $moved = false;
+    private bool $moved = false;
 
     /**
      * @param StreamInterface $stream

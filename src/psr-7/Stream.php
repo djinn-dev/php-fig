@@ -11,6 +11,7 @@ use Throwable;
 
 use function fclose;
 use function feof;
+use function fopen;
 use function fread;
 use function fseek;
 use function fstat;
@@ -22,6 +23,9 @@ use function set_error_handler;
 use function stream_get_contents;
 use function stream_get_meta_data;
 
+/**
+ * @inheritDoc
+ */
 class Stream implements StreamInterface
 {
     public const array READ_WRITE_HASH = [
@@ -39,19 +43,20 @@ class Stream implements StreamInterface
         ],
     ];
 
-    protected array|null $streamMetaData = null;
-
-    protected int|null $size = null;
-
     /**
      * @param resource $stream
+     * @param array|null|null $streamMetaData
+     * @param integer|null|null $size
      * @throws InvalidArgumentException
      */
-    public function __construct(protected $stream)
-    {
+    public function __construct(
+        protected $stream,
+        protected array|null $streamMetaData = null,
+        protected int|null $size = null,
+    ) {
         if (!is_resource($this->stream))
         {
-            throw new InvalidArgumentException('Instance of Stream requires a valid resource');
+            throw new InvalidArgumentException('Invalid stream provided');
         }
     }
 

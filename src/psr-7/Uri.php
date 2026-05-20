@@ -8,6 +8,9 @@ use Psr\Http\Message\UriInterface;
 
 use function ltrim;
 
+/**
+ * @inheritDoc
+ */
 class Uri implements UriInterface
 {
     /**
