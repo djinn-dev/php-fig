@@ -8,7 +8,6 @@ use InvalidArgumentException;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\StreamInterface;
 
-use function array_keys;
 use function array_merge;
 use function implode;
 use function is_array;

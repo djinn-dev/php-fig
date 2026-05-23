@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace DjinnDev\Psr7;
 
-use DjinnDev\Psr17\UriFactory;
 use InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;
@@ -109,7 +108,6 @@ class Request extends MessageAbstract implements RequestInterface
         $clone = clone $this;
         $clone->uri = $uri;
 
-        // var_dump($preserveHost, $clone->hasHeader('Host'), $clone->getHeaderLine('Host') === '');
         if (!$preserveHost || !$clone->hasHeader('Host') || $clone->getHeaderLine('Host') === '')
         {
             $clone = $clone->withoutHeader('Host');

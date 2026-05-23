@@ -11,6 +11,7 @@ use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Message\UriInterface;
 
 use function is_array;
+use function parse_url;
 
 class UriFactory implements UriFactoryInterface
 {

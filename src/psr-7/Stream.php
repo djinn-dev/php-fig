@@ -11,7 +11,6 @@ use Throwable;
 
 use function fclose;
 use function feof;
-use function fopen;
 use function fread;
 use function fseek;
 use function fstat;
