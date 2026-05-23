@@ -76,6 +76,14 @@ final class MessageAbstractTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $testClass = $this->getTestClass();
         $testClass->withHeader($header, false);
+
+        $this->expectException(InvalidArgumentException::class);
+        $testClass = $this->getTestClass();
+        $testClass->withHeader('?', 'test');
+
+        $this->expectException(InvalidArgumentException::class);
+        $testClass = $this->getTestClass();
+        $testClass->withHeader('test', PHP_EOL);
     }
 
     public function testWithAddedHeaderMethod(): void
