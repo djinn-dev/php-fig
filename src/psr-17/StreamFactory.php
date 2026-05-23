@@ -23,7 +23,7 @@ class StreamFactory implements StreamFactoryInterface
      */
     public function createStream(string $content = ''): StreamInterface
     {
-        return self::createStreamFromFile('php://memory', 'w+');
+        return self::createStreamFromFile('php://temp', 'w+');
     }
 
     /**
@@ -31,7 +31,7 @@ class StreamFactory implements StreamFactoryInterface
      */
     public function createStreamFromFile(string $filename, string $mode = 'r'): StreamInterface
     {
-        if (!isset(Stream::READ_WRITE_HASH['read'][$mode]) && !isset(Stream::READ_WRITE_HASH['write'][$mode]))
+        if (!isset(Stream::READ_MODES[$mode]) && !isset(Stream::WRITE_MODES[$mode]))
         {
             throw new InvalidArgumentException('Invalid file mode provided');
         }

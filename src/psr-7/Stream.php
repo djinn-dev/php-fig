@@ -28,19 +28,46 @@ use function stream_get_meta_data;
  */
 class Stream implements StreamInterface
 {
-    public const array READ_WRITE_HASH = [
-        'read' => [
-            'r' => true, 'w+' => true, 'r+' => true, 'x+' => true, 'c+' => true,
-            'rb' => true, 'w+b' => true, 'r+b' => true, 'x+b' => true,
-            'c+b' => true, 'rt' => true, 'w+t' => true, 'r+t' => true,
-            'x+t' => true, 'c+t' => true, 'a+' => true,
-        ],
-        'write' => [
-            'w' => true, 'w+' => true, 'rw' => true, 'r+' => true, 'x+' => true,
-            'c+' => true, 'wb' => true, 'w+b' => true, 'r+b' => true,
-            'x+b' => true, 'c+b' => true, 'w+t' => true, 'r+t' => true,
-            'x+t' => true, 'c+t' => true, 'a' => true, 'a+' => true,
-        ],
+    public const array READ_MODES = [
+        'a+' => true,
+        'a+b' => true,
+        'c+' => true,
+        'c+b' => true,
+        'c+t' => true,
+        'r' => true,
+        'rb' => true,
+        'rt' => true,
+        'r+' => true,
+        'r+b' => true,
+        'r+t' => true,
+        'w+' => true,
+        'w+b' => true,
+        'w+t' => true,
+        'x+' => true,
+        'x+b' => true,
+        'x+t' => true,
+    ];
+
+    public const array WRITE_MODES = [
+        'a' => true,
+        'ab' => true,
+        'a+' => true,
+        'a+b' => true,
+        'c+' => true,
+        'c+b' => true,
+        'c+t' => true,
+        'rw' => true,
+        'r+' => true,
+        'r+b' => true,
+        'r+t' => true,
+        'w' => true,
+        'wb' => true,
+        'w+' => true,
+        'w+b' => true,
+        'w+t' => true,
+        'x+' => true,
+        'x+b' => true,
+        'x+t' => true,
     ];
 
     /**
@@ -201,7 +228,7 @@ class Stream implements StreamInterface
     public function isWritable(): bool
     {
         $mode = $this->getMetadata('mode');
-        return ($mode !== null && isset(self::READ_WRITE_HASH['write'][$mode]));
+        return ($mode !== null && isset(self::WRITE_MODES[$mode]));
     }
 
     /**
@@ -236,7 +263,7 @@ class Stream implements StreamInterface
     public function isReadable(): bool
     {
         $mode = $this->getMetadata('mode');
-        return ($mode !== null && isset(self::READ_WRITE_HASH['read'][$mode]));
+        return ($mode !== null && isset(self::READ_MODES[$mode]));
     }
 
     /**
@@ -298,6 +325,11 @@ class Stream implements StreamInterface
      */
     public function getMetadata(?string $key = null)
     {
+        if (!isset($this->stream))
+        {
+            return null;
+        }
+
         if ($this->streamMetaData === null)
         {
             $this->streamMetaData = stream_get_meta_data($this->stream);
