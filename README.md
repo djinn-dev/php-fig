@@ -1,5 +1,5 @@
 ![PHP Version](https://img.shields.io/badge/php-%5E8.3-blue)
-![License](https://img.shields.io/badge/license-GPL-green)
+![License](https://img.shields.io/badge/license-MIT-green)
 
 # PHP-Fig
 A fast PHP8 implementation of PHP-Fig interfaces.
@@ -30,3 +30,7 @@ $target = (string) $uri->withPath('test');
 
 // $target = 'https://djinn.dev/test'
 ```
+
+## License
+
+This package is released under the MIT License. See [LICENSE](LICENSE).
