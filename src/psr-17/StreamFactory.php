@@ -23,7 +23,9 @@ class StreamFactory implements StreamFactoryInterface
      */
     public function createStream(string $content = ''): StreamInterface
     {
-        return self::createStreamFromFile('php://temp', 'w+');
+        $stream = self::createStreamFromFile('php://temp', 'w+');
+        $stream->write($content);
+        return $stream;
     }
 
     /**

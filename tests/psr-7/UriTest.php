@@ -32,7 +32,7 @@ final class UriTest extends TestCase
         $this->assertInstanceOf(UriInterface::class, $uri->withScheme($scheme));
         $uri = $uri->withScheme($scheme);
         $this->assertEquals($scheme, $uri->getScheme());
-        $this->assertEquals($scheme . '://', (string) $uri);
+        $this->assertEquals($scheme . ':', (string) $uri);
     }
 
     public function testUserInfoMethods(): void
@@ -71,7 +71,7 @@ final class UriTest extends TestCase
         $this->assertInstanceOf(UriInterface::class, $uri->withHost($host));
         $uri = $uri->withHost($host);
         $this->assertEquals($host, $uri->getHost());
-        $this->assertEquals($host, (string) $uri);
+        $this->assertEquals('//' . $host, (string) $uri);
     }
 
     public function testPortMethods(): void

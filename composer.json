@@ -1,7 +1,7 @@
 {
-    "name": "djinn_dev/php-fig",
+    "name": "djinn-dev/php-fig",
     "description": "A fast PHP8 implementation of PHP-Fig interfaces.",
-    "license": "GPL-3.0",
+    "license": "MIT",
     "keywords": [
         "php-fig",
         "psr",
