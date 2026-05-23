@@ -10,7 +10,6 @@ use Psr\Http\Message\UploadedFileInterface;
 use RuntimeException;
 
 use function fopen;
-use function is_string;
 
 use const UPLOAD_ERR_OK;
 use const UPLOAD_ERR_INI_SIZE;
@@ -81,7 +80,7 @@ class UploadedFile implements UploadedFileInterface
     {
         $this->validateStream();
 
-        if (!is_string($targetPath) || $targetPath === '')
+        if ($targetPath === '')
         {
             throw new InvalidArgumentException('Invalid path provided for move operation; must be a non-empty string');
         }

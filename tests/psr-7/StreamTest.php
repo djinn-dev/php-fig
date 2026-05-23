@@ -20,13 +20,16 @@ final class StreamTest extends TestCase
         $this->assertNotEquals([], $stream->getMetadata());
         $this->assertEquals($fileUri, $stream->getMetadata('uri'));
         $this->assertEquals(null, $stream->getMetadata('foo'));
+
+        $this->expectException(InvalidArgumentException::class);
+        $stream = new Stream('');
     }
 
     public function testReadWriteMthods(): void
     {
         foreach (array_merge(Stream::READ_MODES, Stream::WRITE_MODES) as $mode => $true)
         {
-            $fileUri = '/tmp/test.txt';
+            $fileUri = '/tmp/testReadWriteMthods.txt';
             @unlink($fileUri);
             if (!str_starts_with($mode, 'x'))
             {

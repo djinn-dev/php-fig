@@ -6,6 +6,7 @@ namespace DjinnDev\Psr7;
 
 use Psr\Http\Message\UriInterface;
 
+use function is_int;
 use function ltrim;
 
 /**
@@ -244,12 +245,24 @@ class Uri implements UriInterface
         $uri = '';
         if ($this->scheme !== '')
         {
-            $uri .= $this->scheme . ':';
+            $uri .= $this->scheme . '://';
+        }
+
+        $userInfo = $this->getUserInfo();
+        if ($userInfo !== '')
+        {
+            $uri .= $userInfo . '@';
         }
 
         if ($this->host !== '')
         {
-            $uri .= '//' . $this->host;
+
+            $uri .= $this->host;
+        }
+
+        if (is_int($this->port))
+        {
+            $uri .= ':' . $this->port;
         }
 
         if ($this->path !== '')
