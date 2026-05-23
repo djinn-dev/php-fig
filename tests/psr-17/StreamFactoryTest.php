@@ -30,6 +30,11 @@ final class StreamFactoryTest extends TestCase
 
     public function testCreateStreamMethod(): void
     {
-        $this->assertInstanceOf(StreamInterface::class, StreamFactory::getInstance()->createStream());
+        $content = 'foobar';
+
+        $stream = StreamFactory::getInstance()->createStream($content);
+        $this->assertInstanceOf(StreamInterface::class, $stream);
+        $stream->rewind();
+        $this->assertEquals($content, $stream->getContents());
     }
 }
