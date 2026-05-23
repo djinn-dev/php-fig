@@ -25,7 +25,7 @@ declare(strict_types=1);
 
 use DjinnDev\Psr17\UriFactory;
 
-$uri = UriFactory::getInstace()->createUri('https://djinn.dev/');
+$uri = UriFactory::getInstance()->createUri('https://djinn.dev/');
 $target = (string) $uri->withPath('test');
 
 // $target = 'https://djinn.dev/test'
