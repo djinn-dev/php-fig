@@ -4,16 +4,29 @@ declare(strict_types=1);
 
 namespace DjinnDev\Psr7;
 
+use InvalidArgumentException;
 use Psr\Http\Message\UriInterface;
 
 use function is_int;
 use function ltrim;
+use function strtolower;
 
 /**
  * @inheritDoc
  */
 class Uri implements UriInterface
 {
+    public const array SCHEME_TYPES = [
+        'file' => true,
+        'ftp' => true,
+        'http' => true,
+        'https' => true,
+        'imap' => true,
+        'irc' => true,
+        'ircs' => true,
+        'sftp' => true,
+    ];
+
     /**
      * @param string $scheme
      * @param string $host
@@ -34,6 +47,9 @@ class Uri implements UriInterface
         protected string $user = '',
         protected string|null $password = null,
     ) {
+        $this->normalizeAndValidateScheme();
+        $this->normalizeHost();
+        $this->validatePort();
     }
 
     /**
@@ -136,6 +152,7 @@ class Uri implements UriInterface
 
         $clone = clone $this;
         $clone->scheme = $scheme;
+        $clone->normalizeAndValidateScheme();
 
         return $clone;
     }
@@ -169,6 +186,7 @@ class Uri implements UriInterface
 
         $clone = clone $this;
         $clone->host = $host;
+        $clone->normalizeHost();
 
         return $clone;
     }
@@ -185,6 +203,7 @@ class Uri implements UriInterface
 
         $clone = clone $this;
         $clone->port = $port;
+        $clone->validatePort();
 
         return $clone;
     }
@@ -245,7 +264,13 @@ class Uri implements UriInterface
         $uri = '';
         if ($this->scheme !== '')
         {
-            $uri .= $this->scheme . '://';
+            $uri .= $this->scheme . ':';
+        }
+
+        if ($this->host !== '')
+        {
+
+            $uri .= '//';
         }
 
         $userInfo = $this->getUserInfo();
@@ -260,8 +285,14 @@ class Uri implements UriInterface
             $uri .= $this->host;
         }
 
-        if (is_int($this->port))
-        {
+        if (
+            is_int($this->port)
+            && !($this->scheme === 'ftp' && $this->port === 21)
+            && !($this->scheme === 'sftp' && $this->port === 22)
+            && !($this->scheme === 'http' && $this->port === 80)
+            && !($this->scheme === 'https' && $this->port === 443)
+            && !($this->scheme === 'imap' && ($this->port === 143 || $this->port === 993))
+        ) {
             $uri .= ':' . $this->port;
         }
 
@@ -282,5 +313,59 @@ class Uri implements UriInterface
         }
 
         return $uri;
+    }
+
+    /**
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    private function normalizeAndValidateScheme(): void
+    {
+        if ($this->scheme === '')
+        {
+            return;
+        }
+
+        $this->scheme = strtolower($this->scheme);
+
+        if (!isset(self::SCHEME_TYPES[$this->scheme]))
+        {
+            throw new InvalidArgumentException('Unknown scheme type');
+        }
+    }
+
+    /**
+     * @return void
+     */
+    private function normalizeHost(): void
+    {
+        if ($this->host === '')
+        {
+            return;
+        }
+
+        $this->host = strtolower($this->host);
+    }
+
+    /**
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    private function validatePort(): void
+    {
+        if ($this->port === null)
+        {
+            return;
+        }
+
+        if ($this->port < 1)
+        {
+            throw new InvalidArgumentException('Port cannot be less than 1');
+        }
+
+        if ($this->port > 65_535)
+        {
+            throw new InvalidArgumentException('Port cannot be greater than 65535');
+        }
     }
 }
