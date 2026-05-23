@@ -12,7 +12,8 @@ use function array_merge;
 use function implode;
 use function is_array;
 use function is_string;
-use function mb_strtolower;
+use function preg_match;
+use function strtolower;
 
 /**
  * @inheritDoc
@@ -106,7 +107,7 @@ abstract class MessageAbstract implements MessageInterface
     {
         $header = $this->getHeader($name);
 
-        return implode(',', $header);
+        return implode(', ', $header);
     }
 
     /**
@@ -201,7 +202,7 @@ abstract class MessageAbstract implements MessageInterface
      */
     protected function getHeaderName(string $name): string|null
     {
-        $lcName = mb_strtolower($name);
+        $lcName = strtolower($name);
         return $this->headerNameMap[$lcName] ?? null;
     }
 
@@ -245,13 +246,41 @@ abstract class MessageAbstract implements MessageInterface
      */
     protected function setHeader(string $name, string|array $value): void
     {
-        $lcName = mb_strtolower($name);
+        if (
+            $name == ''
+            /*
+             * RFC token chars:
+             * ! # $ % & ' * + - . ^ _ ` | ~ 0-9 A-Z a-z
+             */
+            || preg_match("/^[!#$%&'*+\-.^_`|~0-9A-Za-z]+$/", $name) !== 1
+        ) {
+            throw new InvalidArgumentException('Invalid header name');
+        }
+
+        $lcName = strtolower($name);
         $this->headerNameMap[$lcName] = $name;
 
         $value = $this->getValueAsArray($value);
+
         $this->headers[$name] = [];
         foreach ($value as $val)
         {
+            if (
+                !is_string($val)
+                /*
+                 * RFC 7230 field-content allows:
+                 * - HTAB: \x09
+                 * - SP: \x20
+                 * - visible ASCII: \x21-\x7E
+                 * - obs-text: \x80-\xFF
+                 *
+                 * It must not contain CR, LF, NUL, or other control chars.
+                 */
+                || preg_match('/^[\x09\x20-\x7E\x80-\xFF]*$/', $val) === 0
+            ) {
+                throw new InvalidArgumentException('Invalid header value');
+            }
+
             $this->headers[$name][] = $val;
         }
     }
@@ -282,7 +311,7 @@ abstract class MessageAbstract implements MessageInterface
      */
     protected function removeHeader(string $name): void
     {
-        $lcName = mb_strtolower($name);
+        $lcName = strtolower($name);
         unset($this->headerNameMap[$lcName]);
         unset($this->headers[$name]);
     }
