@@ -37,5 +37,9 @@ final class ResponseTest extends TestCase
             $response = $response->withStatus($statusCode, $reasonPhrase.$statusCode);
             $this->assertNotEquals($reasonPhrase, $response->getReasonPhrase());
         }
+
+        $response = new Response();
+        $this->expectException(InvalidArgumentException::class);
+        $response = $response->withStatus(600);
     }
 }

@@ -3,19 +3,27 @@
 declare(strict_types=1);
 
 use DjinnDev\Psr17\RequestFactory;
-use DjinnDev\Psr17\UriFactory;
+use DjinnDev\Psr7\Request;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\UriInterface;
 
 final class RequestFactoryTest extends TestCase
 {
-    public function testCreateRequestMethod(): void
+    public function testCreateRequestIsRequestInterface(): void
     {
-        $method = 'GET';
-        $uri = 'https://tgeene.me/';
-        $this->assertInstanceOf(RequestInterface::class, RequestFactory::getInstance()->createRequest($method, $uri));
+        $this->assertInstanceOf(RequestInterface::class, RequestFactory::getInstance()->createRequest('GET', 'https://tgeene.me/'));
+    }
 
-        $uri = UriFactory::getInstance()->createUri($uri);
-        $this->assertInstanceOf(RequestInterface::class, RequestFactory::getInstance()->createRequest($method, $uri));
+    public function testCreateRequestParameters(): void
+    {
+        $uri = 'https://tgeene.me/';
+        foreach (Request::VALID_REQUEST_METHODS as $method => $true)
+        {
+            $request = RequestFactory::getInstance()->createRequest($method, $uri);
+            $this->assertEquals($method, $request->getMethod());
+            $this->assertInstanceOf(UriInterface::class, $request->getUri());
+            $this->assertEquals($uri, (string) $request->getUri());
+        }
     }
 }

@@ -32,10 +32,16 @@ final class RequestTest extends TestCase
         foreach (Request::VALID_REQUEST_METHODS as $method => $true)
         {
             $request = new Request();
+
             $request = $request->withMethod($method);
             $this->assertInstanceOf(RequestInterface::class, $request);
             $this->assertEquals($request, $request->withMethod($method));
             $this->assertEquals($method, $request->getMethod());
+
+            $method = strtolower($method);
+            $request = $request->withMethod($method);
+            $this->assertNotEquals($method, $request->getMethod());
+
         }
 
         $this->expectException(InvalidArgumentException::class);
@@ -50,16 +56,15 @@ final class RequestTest extends TestCase
         $uriAlternative = UriFactory::getInstance()->createUri('https://djinn.dev/');
 
         $request = new Request();
+
         $request = $request->withUri($uri);
         $this->assertInstanceOf(RequestInterface::class, $request);
         $this->assertEquals($request, $request->withUri($uri));
         $this->assertEquals($uri, $request->getUri());
 
-        $request = new Request();
         $request = $request->withUri($uri);
         $this->assertNotEquals($request, $request->withUri($uriWithPort));
 
-        $request = new Request();
         $request = $request->withUri($uri);
         $this->assertNotEquals($request, $request->withUri($uriAlternative));
     }
