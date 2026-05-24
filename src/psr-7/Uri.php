@@ -27,6 +27,25 @@ class Uri implements UriInterface
         'sftp' => true,
     ];
 
+    public const array SCHEME_DEFAULT_PORTS = [
+        'ftp' => [
+            21 => true,
+        ],
+        'sftp' => [
+            22 => true,
+            ],
+        'http' => [
+            80 => true,
+            ],
+        'https' => [
+            443 => true,
+            ],
+        'imap' => [
+            143 => true,
+            993 => true,
+            ],
+    ];
+
     /**
      * @param string $scheme
      * @param string $host
@@ -287,11 +306,7 @@ class Uri implements UriInterface
 
         if (
             is_int($this->port)
-            && !($this->scheme === 'ftp' && $this->port === 21)
-            && !($this->scheme === 'sftp' && $this->port === 22)
-            && !($this->scheme === 'http' && $this->port === 80)
-            && !($this->scheme === 'https' && $this->port === 443)
-            && !($this->scheme === 'imap' && ($this->port === 143 || $this->port === 993))
+            && !isset(self::SCHEME_DEFAULT_PORTS[$this->scheme][$this->port])
         ) {
             $uri .= ':' . $this->port;
         }
@@ -348,6 +363,8 @@ class Uri implements UriInterface
     }
 
     /**
+     * Throw if not a valid port
+     *
      * @return void
      * @throws InvalidArgumentException
      */
