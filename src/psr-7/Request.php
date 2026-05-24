@@ -19,6 +19,10 @@ class Request extends MessageAbstract implements RequestInterface
         'PUT' => true,
         'PATCH' => true,
         'DELETE' => true,
+        'HEAD' => true,
+        'OPTIONS' => true,
+        'TRACE' => true,
+        'CONNECT' => true,
     ];
 
     protected string $requestTarget;
@@ -79,10 +83,9 @@ class Request extends MessageAbstract implements RequestInterface
             return $this;
         }
 
-        $this->verifyMethod($method);
-
         $clone = clone $this;
         $clone->method = $method;
+        $clone->normalizeAndValidateMethod();
 
         return $clone;
     }
@@ -128,11 +131,19 @@ class Request extends MessageAbstract implements RequestInterface
         return $clone;
     }
 
-    protected function verifyMethod(string $method): void
+    /**
+     * Force method to UPPER and throw if not a valid method
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    protected function normalizeAndValidateMethod(): void
     {
-        if (!isset(self::VALID_REQUEST_METHODS[$method]))
+        $this->method = strtoupper($this->method);
+
+        if (!isset(self::VALID_REQUEST_METHODS[$this->method]))
         {
-            throw new InvalidArgumentException('Invalid porocol.');
+            throw new InvalidArgumentException('Invalid method.');
         }
     }
 }

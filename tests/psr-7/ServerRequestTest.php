@@ -34,6 +34,7 @@ final class ServerRequestTest extends TestCase
     {
         $serverRequest = new ServerRequest();
         $this->assertEquals([], $serverRequest->getCookieParams());
+
         $serverRequest = $serverRequest->withCookieParams($this->paramsArray);
         $this->assertInstanceOf(ServerRequestInterface::class, $serverRequest);
         $this->assertEquals($serverRequest, $serverRequest->withCookieParams($this->paramsArray));
@@ -45,6 +46,7 @@ final class ServerRequestTest extends TestCase
     {
         $serverRequest = new ServerRequest();
         $this->assertEquals([], $serverRequest->getQueryParams());
+
         $serverRequest = $serverRequest->withQueryParams($this->paramsArray);
         $this->assertInstanceOf(ServerRequestInterface::class, $serverRequest);
         $this->assertEquals($serverRequest, $serverRequest->withQueryParams($this->paramsArray));
@@ -62,10 +64,12 @@ final class ServerRequestTest extends TestCase
 
         $serverRequest = new ServerRequest();
         $this->assertEquals([], $serverRequest->getUploadedFiles());
+
         $serverRequest = $serverRequest->withUploadedFiles($uploadedFiles);
         $this->assertInstanceOf(ServerRequestInterface::class, $serverRequest);
         $this->assertEquals($serverRequest, $serverRequest->withUploadedFiles($uploadedFiles));
         $this->assertEquals($uploadedFiles, $serverRequest->getUploadedFiles());
+
         $uploadedFiles[] = UploadedFileFactory::getInstance()->createUploadedFile(
             StreamFactory::getInstance()->createStream(),
         );
@@ -80,17 +84,21 @@ final class ServerRequestTest extends TestCase
     {
         $serverRequest = new ServerRequest();
         $this->assertEquals(null, $serverRequest->getParsedBody());
+
         $serverRequest = $serverRequest->withParsedBody($this->paramsArray);
         $this->assertInstanceOf(ServerRequestInterface::class, $serverRequest);
         $this->assertEquals($serverRequest, $serverRequest->withParsedBody($this->paramsArray));
         $this->assertEquals($this->paramsArray, $serverRequest->getParsedBody());
         $this->assertNotEquals($serverRequest, $serverRequest->withParsedBody($this->paramsArray + $this->additionalParamsArray));
+
         $paramsObject = json_decode(json_encode($this->paramsArray));
         $this->assertNotEquals($serverRequest, $serverRequest->withParsedBody($paramsObject));
+
         $serverRequest = $serverRequest->withParsedBody($paramsObject);
         $this->assertInstanceOf(ServerRequestInterface::class, $serverRequest);
         $this->assertEquals($serverRequest, $serverRequest->withParsedBody($paramsObject));
         $this->assertEquals($paramsObject, $serverRequest->getParsedBody());
+
         $paramsObject = json_decode(json_encode($this->paramsArray + $this->additionalParamsArray));
         $this->assertNotEquals($serverRequest, $serverRequest->withParsedBody($paramsObject));
         $this->assertNotEquals($serverRequest, $serverRequest->withParsedBody($this->paramsArray));
@@ -108,6 +116,7 @@ final class ServerRequestTest extends TestCase
         $this->assertEquals([], $serverRequest->getAttributes());
         $this->assertEquals(null, $serverRequest->getAttribute($attribute));
         $this->assertEquals($value, $serverRequest->getAttribute($attribute, $value));
+
         $serverRequest = $serverRequest->withAttribute($attribute, $value);
         $this->assertInstanceOf(ServerRequestInterface::class, $serverRequest);
         $this->assertEquals($serverRequest, $serverRequest->withAttribute($attribute, $value));
@@ -115,6 +124,7 @@ final class ServerRequestTest extends TestCase
         $this->assertEquals($value, $serverRequest->getAttribute($attribute));
         $this->assertNotEquals($attribute, $serverRequest->getAttribute($attribute, $attribute));
         $this->assertNotEquals($serverRequest, $serverRequest->withoutAttribute($attribute));
+
         $serverRequest = $serverRequest->withoutAttribute($attribute);
         $this->assertEquals($serverRequest, $serverRequest->withoutAttribute($attribute));
         $this->assertEquals([], $serverRequest->getAttributes());

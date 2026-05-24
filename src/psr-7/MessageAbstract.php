@@ -58,16 +58,16 @@ abstract class MessageAbstract implements MessageInterface
      */
     public function withProtocolVersion(string $version): MessageInterface
     {
-        $this->checkProtocolVersion($version);
-
-        if ($version !== $this->protocolVersion)
+        if ($version === $this->protocolVersion)
         {
-            $clone = clone $this;
-            $clone->protocolVersion = $version;
-            return $clone;
+            return $this;
         }
 
-        return $this;
+        $clone = clone $this;
+        $clone->protocolVersion = $version;
+        $clone->validateProtocolVersion();
+
+        return $clone;
     }
 
     /**
@@ -319,18 +319,17 @@ abstract class MessageAbstract implements MessageInterface
     /**
      * Validate protocol version and throw if invalid
      *
-     * @param string $version
      * @return void
      * @throws InvalidArgumentException
      */
-    protected function checkProtocolVersion(string $version): void
+    protected function validateProtocolVersion(): void
     {
-        if (!isset(self::VALID_PROTOCOL_VERSIONS[$version]))
+        if (!isset(self::VALID_PROTOCOL_VERSIONS[$this->protocolVersion]))
         {
             throw new InvalidArgumentException('Invalid portocol.');
         }
 
-        if (!self::VALID_PROTOCOL_VERSIONS[$version])
+        if (!self::VALID_PROTOCOL_VERSIONS[$this->protocolVersion])
         {
             throw new InvalidArgumentException('Protocol version is obsolete.');
         }

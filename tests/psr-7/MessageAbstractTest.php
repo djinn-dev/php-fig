@@ -21,21 +21,17 @@ final class MessageAbstractTest extends TestCase
         $testClass = $this->getTestClass();
         $this->assertInstanceOf(MessageInterface::class, $testClass->withProtocolVersion($version));
 
-        $testClass = $this->getTestClass();
         $testClass = $testClass->withProtocolVersion($version);
         $this->assertEquals($testClass, $testClass->withProtocolVersion($version));
         $this->assertEquals($version, $testClass->getProtocolVersion());
 
-        $testClass = $this->getTestClass();
         $testClass = $testClass->withProtocolVersion($version);
         $this->assertNotEquals($testClass, $testClass->withProtocolVersion('1.1'));
 
         $this->expectException(InvalidArgumentException::class);
-        $testClass = $this->getTestClass();
         $testClass->withProtocolVersion('0.9');
 
         $this->expectException(InvalidArgumentException::class);
-        $testClass = $this->getTestClass();
         $testClass->withProtocolVersion('foo');
     }
 
@@ -46,43 +42,34 @@ final class MessageAbstractTest extends TestCase
         $valueArray = [$valueString];
 
         $testClass = $this->getTestClass();
-        $this->assertInstanceOf(MessageInterface::class, $testClass->withHeader($header, $valueString));
 
-        $testClass = $this->getTestClass();
+        $this->assertInstanceOf(MessageInterface::class, $testClass->withHeader($header, $valueString));
         $this->assertInstanceOf(MessageInterface::class, $testClass->withHeader($header, $valueArray));
 
-        $testClass = $this->getTestClass();
         $testClass = $testClass->withHeader($header, $valueString);
         $this->assertEquals($testClass, $testClass->withHeader($header, $valueString));
         $this->assertNotEquals($valueString, $testClass->getHeader($header));
 
-        $testClass = $this->getTestClass();
         $testClass = $testClass->withHeader($header, $valueArray);
         $this->assertEquals($testClass, $testClass->withHeader($header, $valueArray));
         $this->assertEquals($valueArray, $testClass->getHeader($header));
 
-        $testClass = $this->getTestClass();
         $testClass = $testClass->withHeader($header, $valueString);
         $this->assertEquals($testClass, $testClass->withHeader($header, $valueArray));
 
-        $testClass = $this->getTestClass();
         $testClass = $testClass->withHeader($header, $valueString);
         $this->assertNotEquals($testClass, $testClass->withHeader($header, 'baz'));
 
-        $testClass = $this->getTestClass();
         $testClass = $testClass->withHeader($header, $valueString);
         $this->assertNotEquals($testClass, $testClass->withHeader('baz', $valueString));
 
         $this->expectException(InvalidArgumentException::class);
-        $testClass = $this->getTestClass();
         $testClass->withHeader($header, false);
 
         $this->expectException(InvalidArgumentException::class);
-        $testClass = $this->getTestClass();
         $testClass->withHeader('?', 'test');
 
         $this->expectException(InvalidArgumentException::class);
-        $testClass = $this->getTestClass();
         $testClass->withHeader('test', PHP_EOL);
     }
 
@@ -93,36 +80,28 @@ final class MessageAbstractTest extends TestCase
         $valueArray = [$valueString];
 
         $testClass = $this->getTestClass();
-        $this->assertInstanceOf(MessageInterface::class, $testClass->withAddedHeader($header, $valueString));
 
-        $testClass = $this->getTestClass();
+        $this->assertInstanceOf(MessageInterface::class, $testClass->withAddedHeader($header, $valueString));
         $this->assertInstanceOf(MessageInterface::class, $testClass->withAddedHeader($header, $valueArray));
 
-        $testClass = $this->getTestClass();
         $testClass = $testClass->withAddedHeader($header, $valueString);
         $this->assertEquals($testClass, $testClass->withAddedHeader($header, $valueString));
 
-        $testClass = $this->getTestClass();
         $testClass = $testClass->withAddedHeader($header, $valueArray);
         $this->assertEquals($testClass, $testClass->withAddedHeader($header, $valueArray));
 
-        $testClass = $this->getTestClass();
         $this->assertEquals($testClass->withAddedHeader($header, $valueString), $testClass->withAddedHeader($header, $valueArray));
 
-        $testClass = $this->getTestClass();
         $testClass = $testClass->withAddedHeader($header, $valueString);
         $this->assertNotEquals($testClass, $testClass->withAddedHeader($header, [$valueString, $valueString]));
 
-        $testClass = $this->getTestClass();
         $testClass = $testClass->withAddedHeader($header, $valueString);
         $this->assertNotEquals($testClass, $testClass->withAddedHeader($header, $header));
 
-        $testClass = $this->getTestClass();
         $testClass = $testClass->withAddedHeader($header, $valueString);
         $this->assertNotEquals($testClass, $testClass->withAddedHeader($valueString, $valueString));
 
         $this->expectException(InvalidArgumentException::class);
-        $testClass = $this->getTestClass();
         $testClass->withAddedHeader($header, false);
     }
 
@@ -132,20 +111,19 @@ final class MessageAbstractTest extends TestCase
         $valueString = 'bar';
 
         $testClass = $this->getTestClass();
+
         $this->assertInstanceOf(MessageInterface::class, $testClass->withoutHeader($header));
 
-        $testClass = $this->getTestClass();
         $testClass = $testClass->withHeader($header, $valueString);
         $this->assertInstanceOf(MessageInterface::class, $testClass->withoutHeader($header));
 
-        $testClass = $this->getTestClass();
+        $this->assertNotEquals($testClass, $testClass->withoutHeader($header));
+        $testClass = $testClass->withoutHeader($header);
         $this->assertEquals($testClass, $testClass->withoutHeader($header));
 
-        $testClass = $this->getTestClass();
         $testClass = $testClass->withHeader($header, $valueString);
         $this->assertEquals($testClass, $testClass->withoutHeader($header . $valueString));
 
-        $testClass = $this->getTestClass();
         $testClass = $testClass->withHeader($header, $valueString);
         $this->assertNotEquals($testClass, $testClass->withoutHeader($header));
     }
@@ -155,13 +133,12 @@ final class MessageAbstractTest extends TestCase
         $body = StreamFactory::getInstance()->createStream();
 
         $testClass = $this->getTestClass();
+
         $this->assertInstanceOf(MessageInterface::class, $testClass->withBody($body));
 
-        $testClass = $this->getTestClass();
         $testClass = $testClass->withBody($body);
         $this->assertEquals($testClass, $testClass->withBody($body));
 
-        $testClass = $this->getTestClass();
         $testClass = $testClass->withBody($body);
         $body = StreamFactory::getInstance()->createStream();
         $this->assertNotEquals($testClass, $testClass->withBody($body));

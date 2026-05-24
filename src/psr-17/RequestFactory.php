@@ -6,8 +6,10 @@ namespace DjinnDev\Psr17;
 
 use DjinnDev\Psr7\Request;
 use DjinnDev\Utilities\SingletonTrait;
+use InvalidArgumentException;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\UriInterface;
 
 use function is_string;
 
@@ -25,10 +27,8 @@ class RequestFactory implements RequestFactoryInterface
             $uri = UriFactory::getInstance()->createUri($uri);
         }
 
-        $request = new Request();
-        $request = $request->withUri($uri);
-        $request = $request->withMethod($method);
-
-        return $request;
+        return (new Request())
+            ->withMethod($method)
+            ->withUri($uri);
     }
 }

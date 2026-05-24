@@ -6,8 +6,10 @@ namespace DjinnDev\Psr17;
 
 use DjinnDev\Psr7\ServerRequest;
 use DjinnDev\Utilities\SingletonTrait;
+use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\UriInterface;
 
 final class ServerRequestFactory implements ServerRequestFactoryInterface
 {
@@ -23,9 +25,8 @@ final class ServerRequestFactory implements ServerRequestFactoryInterface
             $uri = UriFactory::getInstance()->createUri($uri);
         }
 
-        $serverRequest = new ServerRequest(serverParams: $serverParams);
-        $serverRequest = $serverRequest->withMethod($method);
-        $serverRequest = $serverRequest->withUri($uri);
-        return $serverRequest;
+        return (new ServerRequest(serverParams: $serverParams))
+            ->withMethod($method)
+            ->withUri($uri);
     }
 }

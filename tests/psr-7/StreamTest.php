@@ -65,6 +65,7 @@ final class StreamTest extends TestCase
         $stream->write($content);
         $stream->seek(0);
         $this->assertEquals($content, $stream->getContents());
+
         $stream->seek(0);
         $this->assertEquals(substr($content, 0, 3), $stream->read(3));
         $this->assertEquals($content, (string) $stream);
