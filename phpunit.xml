@@ -5,12 +5,21 @@
     <testsuites>
         <testsuite name="psr-7">
             <directory>tests/psr-7</directory>
+            <directory>vendor/php-http/psr7-integration-tests/src</directory>
+            <exclude>vendor/php-http/psr7-integration-tests/src/BaseTest.php</exclude>
+            <exclude>vendor/php-http/psr7-integration-tests/src/RequestIntegrationTest.php</exclude>
+            <exclude>vendor/php-http/psr7-integration-tests/src/ResponseIntegrationTest.php</exclude>
+            <exclude>vendor/php-http/psr7-integration-tests/src/ServerRequestIntegrationTest.php</exclude>
+            <exclude>vendor/php-http/psr7-integration-tests/src/StreamIntegrationTest.php</exclude>
+            <exclude>vendor/php-http/psr7-integration-tests/src/UploadedFileIntegrationTest.php</exclude>
+            <exclude>vendor/php-http/psr7-integration-tests/src/UriIntegrationTest.php</exclude>
         </testsuite>
         <testsuite name="utilities">
             <directory>tests/utilities</directory>
         </testsuite>
         <testsuite name="psr-17">
             <directory>tests/psr-17</directory>
+            <directory>vendor/http-interop/http-factory-tests/test</directory>
         </testsuite>
     </testsuites>
 </phpunit>
