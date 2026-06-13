@@ -3,17 +3,20 @@
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.4/phpunit.xsd"
          bootstrap="tests/bootstrap.php">
     <testsuites>
-        <testsuite name="psr-7">
-            <directory>tests/psr-7</directory>
-        </testsuite>
         <testsuite name="utilities">
             <directory>tests/utilities</directory>
         </testsuite>
-        <testsuite name="psr-17">
-            <directory>tests/psr-17</directory>
-        </testsuite>
         <testsuite name="psr-3">
             <directory>tests/psr-3</directory>
+        </testsuite>
+        <testsuite name="psr-7">
+            <directory>tests/psr-7</directory>
+        </testsuite>
+        <testsuite name="psr-11">
+            <directory>tests/psr-11</directory>
+        </testsuite>
+        <testsuite name="psr-17">
+            <directory>tests/psr-17</directory>
         </testsuite>
     </testsuites>
 </phpunit>
