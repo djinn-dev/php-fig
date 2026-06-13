@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fc3073751aa05d2c0dd17d0bbfe845ec",
+    "content-hash": "5cba04d000eaee7aa2940596017cad6b",
     "packages": [
         {
             "name": "psr/http-factory",
@@ -166,59 +166,6 @@
         }
     ],
     "packages-dev": [
-        {
-            "name": "http-interop/http-factory-tests",
-            "version": "2.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/http-interop/http-factory-tests.git",
-                "reference": "bb19a03bb5c9097e8d34499dc86cd94ec4e58d25"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/http-interop/http-factory-tests/zipball/bb19a03bb5c9097e8d34499dc86cd94ec4e58d25",
-                "reference": "bb19a03bb5c9097e8d34499dc86cd94ec4e58d25",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^8.1",
-                "phpunit/phpunit": "^10.0 || ^11.0 || ^12.0",
-                "psr/http-factory": "^1.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Interop\\Http\\Factory\\": "test/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "PHP-FIG",
-                    "homepage": "https://www.php-fig.org/"
-                },
-                {
-                    "name": "Contributors",
-                    "homepage": "https://github.com/http-interop/http-factory-tests/graphs/contributors"
-                }
-            ],
-            "description": "Unit tests for HTTP factories",
-            "keywords": [
-                "factory",
-                "http",
-                "psr-17",
-                "psr-7",
-                "test"
-            ],
-            "support": {
-                "issues": "https://github.com/http-interop/http-factory-tests/issues",
-                "source": "https://github.com/http-interop/http-factory-tests/tree/2.3.0"
-            },
-            "time": "2025-03-23T23:17:55+00:00"
-        },
         {
             "name": "myclabs/deep-copy",
             "version": "1.13.4",
@@ -454,62 +401,6 @@
                 "source": "https://github.com/phar-io/version/tree/3.2.1"
             },
             "time": "2022-02-21T01:04:05+00:00"
-        },
-        {
-            "name": "php-http/psr7-integration-tests",
-            "version": "1.5.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-http/psr7-integration-tests.git",
-                "reference": "556fd1629352dfeec0f600e92ea2b601eacba80a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-http/psr7-integration-tests/zipball/556fd1629352dfeec0f600e92ea2b601eacba80a",
-                "reference": "556fd1629352dfeec0f600e92ea2b601eacba80a",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.3 || ^8.0",
-                "phpunit/phpunit": "^9.3 || ^10.0 || ^11.5 || ^12.4",
-                "psr/http-message": "^1.0 || ^2.0"
-            },
-            "require-dev": {
-                "f3-factory/fatfree-psr7": "^2.0",
-                "guzzlehttp/psr7": "^1.7 || ^2.0",
-                "httpsoft/http-message": "^1.1",
-                "laminas/laminas-diactoros": "^2.1 || ^3.0",
-                "nyholm/psr7": "^1.0",
-                "ringcentral/psr7": "^1.2",
-                "slim/psr7": "^1.4"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Http\\Psr7Test\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Tobias Nyholm",
-                    "email": "tobias.nyholm@gmail.com"
-                }
-            ],
-            "description": "Test suite for PSR7",
-            "homepage": "http://php-http.org",
-            "keywords": [
-                "psr-7",
-                "test"
-            ],
-            "support": {
-                "issues": "https://github.com/php-http/psr7-integration-tests/issues",
-                "source": "https://github.com/php-http/psr7-integration-tests/tree/1.5.1"
-            },
-            "time": "2025-12-08T08:16:55+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
